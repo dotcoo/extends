@@ -2,7 +2,7 @@
 
 'use strict';
 
-require('./extends');
+require('./index');
 
 const list = [
   { id: 1, pid: 0, name: '女装男装' },
