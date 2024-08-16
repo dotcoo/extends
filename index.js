@@ -651,7 +651,7 @@ Object.defineProperties(Set.prototype, {
 Object.defineProperties(Date, {
   new: {
     value: function(...args) {
-      return args.length != 1 ? new Date(...args) : Number.isNaN(+args[0]) ? new Date(args[0].replace(/-/g, '/')) : new Date(args[0]>2650000000 ? args[0] : args[0]*1000);
+      return args.length != 1 ? new Date(...args) : Number.isNaN(+args[0]) ? new Date(args[0].includes('T') ? args[0] : args[0].replace(/-/g, '/')) : new Date(args[0]>2650000000 ? args[0] : args[0]*1000);
     },
     enumerable: false, configurable: true, writable: true,
   },
