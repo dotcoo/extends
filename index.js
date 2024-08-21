@@ -41,10 +41,10 @@ Object.defineProperties(Object, {
 
 Object.defineProperties(Object.prototype, {
   length2: {
-    get: function() {
+    value: function() {
       return Object.keys(this).length;
     },
-    enumerable: false, configurable: true,
+    enumerable: false, configurable: true, writable: true,
   },
   entries2: {
     value: function() {
@@ -204,6 +204,12 @@ Object.defineProperties(Number.prototype, {
 });
 
 Object.defineProperties(String.prototype, {
+  length2: {
+    value: function() {
+      return this.length;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
   substring2: {
     value: function(s = 0, e = this.length) {
       s = s >= 0 ? s : this.length + s;
@@ -331,10 +337,10 @@ Object.defineProperties(String.prototype, {
 
 Object.defineProperties(Array.prototype, {
   length2: {
-    get: function() {
+    value: function() {
       return this.length;
     },
-    enumerable: false, configurable: true,
+    enumerable: false, configurable: true, writable: true,
   },
   entries2: {
     value: function() {
@@ -571,17 +577,11 @@ Object.defineProperties(Array.prototype, {
 });
 
 Object.defineProperties(Map.prototype, {
-  length: {
-    get: function() {
-      return this.size;
-    },
-    enumerable: false, configurable: true,
-  },
   length2: {
-    get: function() {
+    value: function() {
       return this.size;
     },
-    enumerable: false, configurable: true,
+    enumerable: false, configurable: true, writable: true,
   },
   entries2: {
     value: function() {
@@ -616,17 +616,11 @@ Object.defineProperties(Map.prototype, {
 });
 
 Object.defineProperties(Set.prototype, {
-  length: {
-    get: function() {
-      return this.size;
-    },
-    enumerable: false, configurable: true,
-  },
   length2: {
-    get: function() {
+    value: function() {
       return this.size;
     },
-    enumerable: false, configurable: true,
+    enumerable: false, configurable: true, writable: true,
   },
   entries2: {
     value: function() {
