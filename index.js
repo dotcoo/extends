@@ -9,7 +9,7 @@
 Object.defineProperties(Object, {
   isObject: {
     value: function(o) {
-      return Object.prototype.toString.call(b) === '[object Object]';
+      return Object.prototype.toString.call(o) === '[object Object]';
     },
     enumerable: false, configurable: true, writable: true,
   },
