@@ -13,14 +13,14 @@ Object.defineProperties(Object, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  assign2: {
-    value: function(a, ...bs) {
+  assign1: {
+    value: function(o = { array: false }, a = {}, ...bs) {
       const merge = (a, b) => {
         const at = Object.prototype.toString.call(a), bt = Object.prototype.toString.call(b);
         if (at !== bt) {
           return b;
         } else if (at === '[object Array]') {
-          return a.concat(...b);
+          return o.array ? a.concat(...b) : b;
         } else if (at === '[object Object]') {
           for (const k in b) {
             a[k] = merge(a[k], b[k]);
@@ -34,6 +34,18 @@ Object.defineProperties(Object, {
         a = merge(a, b);
       }
       return a;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  assign2: {
+    value: function(...args) {
+      return this.assign1({ array: false }, ...args);
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  assign3: {
+    value: function(...args) {
+      return this.assign1({ array: true }, ...args);
     },
     enumerable: false, configurable: true, writable: true,
   },
