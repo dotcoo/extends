@@ -89,8 +89,8 @@ Object.defineProperties(Object.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   map2: {
-    value: function(cb = (k, v) => [v, k]) {
-      return Object.entries(this).map(([k, v]) => cb(v, k));
+    value: function(cb = (k, v, i) => [k, v], i = 0) {
+      return Object.entries(this).map(([k, v]) => cb(k, v, i++));
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -111,6 +111,12 @@ Object.defineProperties(Object.prototype, {
         if (!s.has(k)) { o[k] = this[k]; }
       }
       return o;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  attr2: {
+    value: function(name, ...args) {
+      return typeof name == 'function' ? name(this, ...args) : this[name];
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -251,11 +257,11 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  each: {
-    value: function(cb = v => v, n = 1) {
+  splitSegment: {
+    value: function(n = 1) {
       const a = [];
-      for (let l = this.length - n + 1, i = 0; i < l; i += n) {
-        a.push(cb(this, i, a));
+      for (let i = 0; i < this.length; i += n) {
+        a.push(this.substring(i, n));
       }
       return a;
     },
@@ -463,7 +469,7 @@ Object.defineProperties(Array.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   find2: {
-    value: function(cb = v => v, defval = null) {
+    value: function(cb, defval = null) {
       return this.find(cb) ?? defval;
     },
     enumerable: false, configurable: true, writable: true,
@@ -475,9 +481,9 @@ Object.defineProperties(Array.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   unique: {
-    value: function(cb = v => v) {
+    value: function() {
       const s = new Set();
-      return this.map(cb).filter(v => s.has(v) ? false : !!s.add(v));
+      return this.filter(v => s.has(v) ? false : !!s.add(v));
     },
     enumerable: false, configurable: true, writable: true,
   },
