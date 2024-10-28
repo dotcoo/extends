@@ -1,15 +1,17 @@
 {
   "name": "@dotcoo/extends",
-  "version": "1.0.6",
-  "description": "",
-  "main": "index.js",
-  "publishConfig": {
-      "access": "public"
+  "version": "1.0.7",
+  "description": "dotcoo extends",
+  "author": "dotcoo <dotcoo@163.com> (http://blog.dotcoo.com)",
+  "homepage": "https://github.com/dotcoo/extends#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dotcoo/extends.git"
   },
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC"
 }

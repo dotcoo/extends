@@ -213,6 +213,12 @@ Object.defineProperties(Number.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  toFixed2: {
+    value: function(...args) {
+      return +this.toFixed(...args);
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
   toDate: {
     value: function() {
       return Date.new(this);
@@ -342,6 +348,12 @@ Object.defineProperties(String.prototype, {
         n = n * 64 + cs.indexOf(this.at(i));
       }
       return n;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  toFixed2: {
+    value: function(...args) {
+      return +(+this).toFixed(...args);
     },
     enumerable: false, configurable: true, writable: true,
   },
