@@ -495,7 +495,7 @@ Object.defineProperties(Array.prototype, {
   unique: {
     value: function(cb = v => v) {
       const s = new Set();
-      return this.filter(v => s.has(cb(v)) ? false : !!s.add(cb(v));
+      return this.filter(v => s.has(cb(v)) ? false : !!s.add(cb(v)));
     },
     enumerable: false, configurable: true, writable: true,
   },
