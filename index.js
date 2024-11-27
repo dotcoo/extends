@@ -78,7 +78,7 @@ Object.defineProperties(Object.prototype, {
   },
   clone2: {
     value: function() {
-      return JSON.parse(JSON.stringify(this));
+      return JSON.parse(JSON.stringify(this)); // return structuredClone(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -134,10 +134,11 @@ Object.defineProperties(Object.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  // ====== Tree ======
   getParents2: {
-    value: function(self = false, depth = 1, parent = 'parent') {
+    value: function(self = false, depth = -1, parent = 'parent') {
       const ps = self ? [this] : [];
-      for (let p = this[parent], i = depth; p && i != 0; i--) {
+      for (let p = this[parent], i = depth; i != 0 && p; i--) {
         ps.push(p);
         p = p[parent];
       }
@@ -146,7 +147,7 @@ Object.defineProperties(Object.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   getChildrens2: {
-    value: function(self = false, depth = 1, children = 'children') {
+    value: function(self = false, depth = -1, children = 'children') {
       this[children] = this[children] || [];
       const cs = self ? [this] : [];
       if (depth == 0) { return cs; }
@@ -154,6 +155,17 @@ Object.defineProperties(Object.prototype, {
         cs.push(...c.getChildrens2(true, depth - 1, children));
       }
       return cs;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  treeFind: {
+    value: function(cb, self = false, depth = -1, children = 'children') {
+      if (self && depth != 0 && cb(this)) { return this; }
+      for (const v of this[children] ?? []) {
+        const c = v.treeFind(cb, true, depth - 1, children);
+        if (c) { return c; }
+      }
+      return null;
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -601,6 +613,33 @@ Object.defineProperties(Array.prototype, {
         v[children] = v[children]?.treeMap(cb, o) ?? empty;
         return v;
       });
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  tree2tree: {
+    value: function(r = null, p = null, o = {}) {
+      const { id = 'id', pid = 'pid', level = 'level', parent = 'parent', children = 'children', root = 'root', empty = null } = o;
+      for (const v of this) {
+        Object.defineProperties(v, {
+          [root]: { value: r, enumerable: false, configurable: true, writable: true },
+          [parent]: { value: p, enumerable: false, configurable: true, writable: true },
+        });
+        v[pid] = p?.[id] ?? null;
+        v[level] = (p?.[level] ?? -1) + 1;
+        v[children] = v[children]?.tree2tree(r, v, o) ?? empty;
+      }
+      return this;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  treeFind: {
+    value: function(cb, children = 'children') {
+      for (const v of this) {
+        if (cb(v)) { return v; }
+        const c = v[children]?.treeFind(cb, children);
+        if (c) { return c; }
+      }
+      return null;
     },
     enumerable: false, configurable: true, writable: true,
   },

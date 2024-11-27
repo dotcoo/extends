@@ -2,7 +2,7 @@
 
 'use strict';
 
-require('./index');
+typeof window !== 'undefined' || require('./index');
 
 const list = [
   { id: 1, pid: 0, name: '女装男装' },
@@ -95,6 +95,9 @@ const list = [
 // console.log(list.toTreeRecursion());
 // console.log(list.toTree());
 
+console.log(list.clone2().toTree().treeFind(v => v.id == 33));
+console.log(list.clone2().toTree().treeFind(v => v.id == 33).getParents2(true, -1));
+
 // console.log(JSON.stringify(list.toTreeRecursion()));
 // console.log(JSON.stringify(list.toTree()));
 
@@ -137,7 +140,120 @@ const list = [
 // console.log(level2.getParents2(true, 3));
 // console.log(level2.getParents2(true, 3).some(v => v.id == 4));
 
-const root = { name: '所有分类', list, children: [] };
-root.children = list.toTree(root);
-console.log(root.getChildrens2(false, 100).each(v => console.log('  '.repeat(v.level) + v.id)));
-console.log(root.list.find(v => v.id == 3).getChildrens2());
+// const root = { name: '所有分类', list, children: [] };
+// root.children = list.toTree(root);
+// console.log(root.getChildrens2(false, 100).each(v => console.log('  '.repeat(v.level) + v.id)));
+// console.log(root.list.find(v => v.id == 3).getChildrens2());
+
+const tree1 = [
+  { id: 1, name: '女装男装', children: [
+    { id: 4, name: '潮流女装', children: [
+      { id: 13, name: '羽绒服' },
+      { id: 14, name: '毛呢大衣' },
+      { id: 15, name: '毛衣' },
+      { id: 16, name: '冬季外套' },
+      { id: 17, name: '新品' },
+      { id: 18, name: '裤子' },
+      { id: 19, name: '连衣裙' },
+      { id: 20, name: '腔调', children: [
+        { id: 100, name: '腔调4' },
+      ] },
+    ] },
+    { id: 5, name: '时尚男装', children: [
+      { id: 21, name: '秋冬新品' },
+      { id: 22, name: '淘先生' },
+      { id: 23, name: '拾货' },
+      { id: 24, name: '秋冬外套' },
+      { id: 25, name: '时尚套装' },
+      { id: 26, name: '潮牌' },
+      { id: 27, name: '爸爸装' },
+      { id: 28, name: '西装' },
+    ] },
+    { id: 6, name: '秋外套', children: [
+      { id: 29, name: '秋款' },
+      { id: 30, name: '夹克' },
+      { id: 31, name: '卫衣' },
+      { id: 32, name: '西装' },
+      { id: 33, name: '风衣' },
+      { id: 34, name: '皮衣' },
+      { id: 35, name: '毛呢外套' },
+      { id: 36, name: '薄羽绒' },
+    ] },
+  ] },
+  { id: 2, name: '鞋类箱包', children: [
+    { id: 7, name: '女鞋', children: [
+      { id: 37, name: '帆布鞋' },
+      { id: 38, name: '高帮' },
+      { id: 39, name: '低帮' },
+      { id: 40, name: '内增高' },
+      { id: 41, name: '懒人鞋' },
+      { id: 42, name: '厚底' },
+      { id: 43, name: '韩版' },
+      { id: 44, name: '系带' },
+    ] },
+    { id: 8, name: '潮流女包', children: [
+      { id: 45, name: '上新' },
+      { id: 46, name: '人气款' },
+      { id: 47, name: '单肩包' },
+      { id: 48, name: '斜挎包' },
+      { id: 49, name: '手提包' },
+      { id: 50, name: '迷你包' },
+      { id: 51, name: '手拿包' },
+      { id: 52, name: '小方包' },
+    ] },
+    { id: 9, name: '帽子', children: [
+      { id: 53, name: '棒球帽' },
+      { id: 54, name: '鸭舌帽' },
+      { id: 55, name: '遮阳帽' },
+      { id: 56, name: '渔夫帽' },
+      { id: 57, name: '草帽' },
+      { id: 58, name: '平顶帽' },
+      { id: 59, name: '嘻哈帽' },
+      { id: 60, name: '贝雷帽 ' },
+    ] },
+  ] },
+  { id: 3, name: '母婴用品', children: [
+    { id: 10, name: '宝宝奶粉', children: [
+      { id: 61, name: '英国牛栏' },
+      { id: 62, name: '英国爱他美' },
+      { id: 63, name: '美赞臣' },
+      { id: 64, name: '雅培' },
+      { id: 65, name: '澳洲爱他美' },
+      { id: 66, name: '可瑞康' },
+      { id: 67, name: '惠氏' },
+      { id: 68, name: '贝因美' },
+    ] },
+    { id: 11, name: '婴童用品', children: [
+      { id: 69, name: '推车' },
+      { id: 70, name: '驱蚊器' },
+      { id: 71, name: '婴儿床' },
+      { id: 72, name: '理发器' },
+      { id: 73, name: '奶瓶' },
+      { id: 74, name: '餐椅' },
+      { id: 75, name: '背带腰凳' },
+      { id: 76, name: '安全座椅' },
+    ] },
+    { id: 12, name: '辅食营养', children: [
+      { id: 77, name: '米粉' },
+      { id: 78, name: '肉松' },
+      { id: 79, name: '磨牙棒' },
+      { id: 80, name: '果泥' },
+      { id: 81, name: '益生菌' },
+      { id: 82, name: '清火开胃' },
+      { id: 83, name: '钙铁锌' },
+      { id: 84, name: '维生素' },
+    ] },
+  ] },
+];
+
+console.log(tree1.clone2().tree2tree());
+
+
+
+console.log(tree1.clone2().tree2tree().treeFind(v => v.id == 33));
+console.log(tree1.clone2().tree2tree().treeFind(v => v.id == 33).getParents2(true, -1));
+
+const root = { id: 0, name: 'ROOT', level: 0 };
+root.children = tree1.clone2().tree2tree(root, root);
+console.log(root);
+console.log(root.treeFind(v => v.id == 33));
