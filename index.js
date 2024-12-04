@@ -116,7 +116,7 @@ Object.defineProperties(Object.prototype, {
   },
   attr2: {
     value: function(name, ...args) {
-      return typeof name == 'function' ? name(this, ...args) : this[name];
+      return typeof this != 'object' ? this : typeof name == 'function' ? name(this, ...args) : this[name];
     },
     enumerable: false, configurable: true, writable: true,
   },
