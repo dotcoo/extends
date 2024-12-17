@@ -6,6 +6,28 @@
 
 // ====== 扩展 ======
 
+function ObjectAssign0(o = { array: false }, a = {}, ...args) {
+  const merge = (a, b) => {
+    const at = Object.prototype.toString.call(a), bt = Object.prototype.toString.call(b);
+    if (at !== bt) {
+      return b;
+    } else if (at === '[object Array]') {
+      return o.array ? a.concat(...b) : b;
+    } else if (at === '[object Object]') {
+      for (const k in b) {
+        a[k] = merge(a[k], b[k]);
+      }
+      return a;
+    } else {
+      return b;
+    }
+  };
+  for (const b of args) {
+    a = merge(a, b);
+  }
+  return a;
+}
+
 Object.defineProperties(Object, {
   isObject: {
     value: function(o) {
@@ -13,88 +35,64 @@ Object.defineProperties(Object, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  assign0: {
+    value: function(a = {}, ...args) {
+      return ObjectAssign0({ array: false }, a, ...args)
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
   assign1: {
-    value: function(o = { array: false }, a = {}, ...bs) {
-      const merge = (a, b) => {
-        const at = Object.prototype.toString.call(a), bt = Object.prototype.toString.call(b);
-        if (at !== bt) {
-          return b;
-        } else if (at === '[object Array]') {
-          return o.array ? a.concat(...b) : b;
-        } else if (at === '[object Object]') {
-          for (const k in b) {
-            a[k] = merge(a[k], b[k]);
-          }
-          return a;
-        } else {
-          return b;
-        }
-      };
-      for (const b of bs) {
-        a = merge(a, b);
-      }
-      return a;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  assign2: {
-    value: function(...args) {
-      return this.assign1({ array: false }, ...args);
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  assign3: {
-    value: function(...args) {
-      return this.assign1({ array: true }, ...args);
+    value: function(a = {}, ...argss) {
+      return ObjectAssign0({ array: true }, a, ...args);
     },
     enumerable: false, configurable: true, writable: true,
   },
 });
 
 Object.defineProperties(Object.prototype, {
-  length2: {
+  length0: {
     value: function() {
       return Object.keys(this).length;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  entries2: {
+  entries0: {
     value: function() {
       return Object.entries(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
-  keys2: {
+  keys0: {
     value: function() {
       return Object.keys(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
-  values2: {
+  values0: {
     value: function() {
       return Object.values(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
-  clone2: {
+  clone0: {
     value: function() {
       return JSON.parse(JSON.stringify(this)); // return structuredClone(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
-  assign2: {
-    value: function(...bs) {
-      return this.constructor.assign2(this, ...bs);
+  assign0: {
+    value: function(...args) {
+      return this.constructor.assign0(this, ...args);
     },
     enumerable: false, configurable: true, writable: true,
   },
-  map2: {
+  map0: {
     value: function(cb = (k, v, i) => [k, v], i = 0) {
       return Object.entries(this).map(([k, v]) => cb(k, v, i++));
     },
     enumerable: false, configurable: true, writable: true,
   },
-  pick2: {
+  pick0: {
     value: function(...keys) {
       const o = {};
       for (const k of keys) {
@@ -104,7 +102,7 @@ Object.defineProperties(Object.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  omit2: {
+  omit0: {
     value: function(...keys) {
       const o = {}, s = new Set(keys);
       for (const k in this) {
@@ -114,20 +112,20 @@ Object.defineProperties(Object.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  attr2: {
+  attr0: {
     value: function(name, ...args) {
       return typeof this != 'object' ? this : typeof name == 'function' ? name(this, ...args) : this[name];
     },
     enumerable: false, configurable: true, writable: true,
   },
-  log2: {
+  log0: {
     value: function(...args) {
       console.log(...args, this);
       return this;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  debug2: {
+  debug0: {
     value: function(...args) {
       console.debug(...args, this);
       return this;
@@ -135,7 +133,7 @@ Object.defineProperties(Object.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   // ====== Tree ======
-  getParents2: {
+  getParents0: {
     value: function(self = false, depth = -1, parent = 'parent') {
       const ps = self ? [this] : [];
       for (let p = this[parent], i = depth; i != 0 && p; i--) {
@@ -146,23 +144,23 @@ Object.defineProperties(Object.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  getChildrens2: {
+  getChildrens0: {
     value: function(self = false, depth = -1, children = 'children') {
       this[children] = this[children] || [];
       const cs = self ? [this] : [];
       if (depth == 0) { return cs; }
       for (const c of this[children]) {
-        cs.push(...c.getChildrens2(true, depth - 1, children));
+        cs.push(...c.getChildrens0(true, depth - 1, children));
       }
       return cs;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  treeFind: {
+  treeFind0: {
     value: function(cb, self = false, depth = -1, children = 'children') {
       if (self && depth != 0 && cb(this)) { return this; }
       for (const v of this[children] ?? []) {
-        const c = v.treeFind(cb, true, depth - 1, children);
+        const c = v.treeFind0(cb, true, depth - 1, children);
         if (c) { return c; }
       }
       return null;
@@ -225,7 +223,7 @@ Object.defineProperties(Number.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  toFixed2: {
+  toFixed0: {
     value: function(...args) {
       return +this.toFixed(...args);
     },
@@ -240,13 +238,13 @@ Object.defineProperties(Number.prototype, {
 });
 
 Object.defineProperties(String.prototype, {
-  length2: {
+  length0: {
     value: function() {
       return this.length;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  substring2: {
+  substring0: {
     value: function(s = 0, e = this.length) {
       s = s >= 0 ? s : this.length + s;
       e = e >= 0 ? e : this.length + e;
@@ -254,7 +252,7 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  substr2: {
+  substr0: {
     value: function(s = 0, e = this.length) {
       s = s >= 0 ? s : this.length + s;
       e = s + e;
@@ -262,16 +260,16 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  split2: {
-    value: function(s = ',', n = 1) {
+  split0: {
+    value: function(s = ',', n = -1) {
       const a = this ? this.split(s) : [];
-      return n === 1 ? a : a.push2(a.splice(n-1).join(s));
+      return n === -1 ? a : a.push0(a.splice(n-1).join(s));
     },
     enumerable: false, configurable: true, writable: true,
   },
-  split2number: {
+  splitNumber: {
     value: function(s = ',') {
-      return this.split2(s).map(v => +v);
+      return this.split0(s).map(v => +v);
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -363,7 +361,7 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  toFixed2: {
+  toFixed0: {
     value: function(...args) {
       return +(+this).toFixed(...args);
     },
@@ -408,85 +406,29 @@ Object.defineProperties(String.prototype, {
 });
 
 Object.defineProperties(Array.prototype, {
-  length2: {
+  length0: {
     value: function() {
       return this.length;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  entries2: {
+  entries0: {
     value: function() {
       return this.entries();
     },
     enumerable: false, configurable: true, writable: true,
   },
-  shift2: {
-    value: function(...args) {
-      this.shift(...args);
-      return this;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  shift3: {
-    value: function(...args) {
-      this.shift(...args);
-      return args;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  shift4: {
-    value: function(v, ...args) {
-      this.shift(v, ...args);
-      return v;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  pop2: {
-    value: function(...args) {
-      this.pop(...args);
-      return this;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  pop3: {
-    value: function(...args) {
-      this.pop(...args);
-      return args;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  pop4: {
-    value: function(v, ...args) {
-      this.pop(v, ...args);
-      return v;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  unshift2: {
-    value: function(...args) {
-      this.unshift(...args);
-      return this;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  unshift3: {
-    value: function(...args) {
-      this.unshift(...args);
-      return args;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  unshift4: {
-    value: function(...args) {
-      this.unshift(...args);
-      return args[0];
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  push2: {
+  push0: {
     value: function(...args) {
       this.push(...args);
       return this;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  push1: {
+    value: function(...args) {
+      this.push(...args);
+      return args[0];
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -497,10 +439,66 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  push4: {
+  pop0: {
     value: function(...args) {
-      this.push(...args);
+      this.pop(...args);
+      return this;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  pop1: {
+    value: function(...args) {
+      this.pop(...args);
       return args[0];
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  pop3: {
+    value: function(...args) {
+      this.pop(...args);
+      return args;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  unshift0: {
+    value: function(...args) {
+      this.unshift(...args);
+      return this;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  unshift1: {
+    value: function(...args) {
+      this.unshift(...args);
+      return args[0];
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  unshift3: {
+    value: function(...args) {
+      this.unshift(...args);
+      return args;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  shift0: {
+    value: function(...args) {
+      this.shift(...args);
+      return this;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  shift1: {
+    value: function(...args) {
+      this.shift(...args);
+      return args[0];
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  shift3: {
+    value: function(...args) {
+      this.shift(...args);
+      return args;
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -516,13 +514,7 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  at2: {
-    value: function(i, defval = null) {
-      return this.at(i) ?? defval;
-    },
-    enumerable: false, configurable: true, writable: true,
-  },
-  find2: {
+  find0: {
     value: function(cb, defval = null) {
       return this.find(cb) ?? defval;
     },
@@ -705,19 +697,19 @@ Object.defineProperties(Array.prototype, {
 });
 
 Object.defineProperties(Map.prototype, {
-  length2: {
+  length0: {
     value: function() {
       return this.size;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  entries2: {
+  entries0: {
     value: function() {
       return this.entries();
     },
     enumerable: false, configurable: true, writable: true,
   },
-  get2: {
+  get0: {
     value: function(key, defval = null) {
       return this.has(key) ? this.get(key) : typeof defval == 'function' ? defval(key) : defval;
     },
@@ -744,13 +736,13 @@ Object.defineProperties(Map.prototype, {
 });
 
 Object.defineProperties(Set.prototype, {
-  length2: {
+  length0: {
     value: function() {
       return this.size;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  entries2: {
+  entries0: {
     value: function() {
       return this.entries();
     },
@@ -952,7 +944,7 @@ Object.defineProperties(Promise, {
 });
 
 Object.defineProperties(JSON, {
-  parse2: {
+  parse0: {
     value: function(v, defval = null) {
       try {
         return JSON.parse(v);
