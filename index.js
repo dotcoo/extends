@@ -373,6 +373,16 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  hex2bytes: {
+    value: function() {
+      const bytes = [];
+      for (let i = 0; i < this.length; i += 2) {
+        bytes.push(Number.parseInt(this.substring(i, i+2), 16));
+      }
+      return bytes;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
   string2bytes: {
     value: function() {
       const bytes = [], e = encodeURIComponent(this);
@@ -567,6 +577,16 @@ Object.defineProperties(Array.prototype, {
         o[k].push(v);
       }
       return o;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  bytes2hex: {
+    value: function() {
+      let s = '';
+      for (let i = 0; i < this.length; i++) {
+        s += (this[i] < 16 ? '0' : '') + this[i].toString(16);
+      }
+      return decodeURIComponent(s);
     },
     enumerable: false, configurable: true, writable: true,
   },
