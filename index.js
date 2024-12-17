@@ -375,6 +375,36 @@ Object.defineProperties(String.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  string2bytes: {
+    value: function() {
+      const bytes = [], e = encodeURIComponent(this);
+      for (let i = 0; i < e.length;) {
+        bytes.push(e.charAt(i) == '%' ? Number.parseInt(e.substring(i+1, i+=3), 16) : e.charCodeAt(i++));
+      }
+      return bytes;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  base64decode: {
+    value: function(url) {
+      const bytes = [], maps = {}, chars = url === true ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      for (let i = 0; i < chars.length; i++) { maps[chars.charAt(i)] = i; }
+      const l =  this.charAt(this.length - 1) != '=' ? this.length : this.charAt(this.length - 2) != '=' ? this.length - 1 : this.length - 2;
+      for (let i = 3; i < l; i += 4) {
+        const n = (maps[this.charAt(i-3)] << 18) + (maps[this.charAt(i-2)] << 12) + (maps[this.charAt(i-1)] << 6) + maps[this.charAt(i)];
+        bytes.push((n & 0xFF0000) >> 16, (n & 0xFF00) >> 8, n & 0xFF);
+      }
+      if (l % 4 == 3) {
+        const n = (maps[this.charAt(l-3)] << 18) + (maps[this.charAt(l-2)] << 12) + (maps[this.charAt(l-1)] << 6);
+        bytes.push((n & 0xFF0000) >> 16, (n & 0xFF00) >> 8);
+      } else if (l % 4 == 2) {
+        const n = (maps[this.charAt(l-3)] << 18) + (maps[this.charAt(l-2)] << 12);
+        bytes.push((n & 0xFF0000) >> 16);
+      }
+      return bytes;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
 });
 
 Object.defineProperties(Array.prototype, {
@@ -447,9 +477,9 @@ Object.defineProperties(Array.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   unshift4: {
-    value: function(v, ...args) {
-      this.unshift(v, ...args);
-      return v;
+    value: function(...args) {
+      this.unshift(...args);
+      return args[0];
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -468,9 +498,9 @@ Object.defineProperties(Array.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   push4: {
-    value: function(v, ...args) {
-      this.push(v, ...args);
-      return v;
+    value: function(...args) {
+      this.push(...args);
+      return args[0];
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -545,6 +575,35 @@ Object.defineProperties(Array.prototype, {
         o[k].push(v);
       }
       return o;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  bytes2string: {
+    value: function() {
+      let s = '';
+      for (let i = 0; i < this.length; i++) {
+        s += '%' + (this[i] < 16 ? '0' : '') + this[i].toString(16);
+      }
+      return decodeURIComponent(s);
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  base64encode: {
+    value: function(url, equal) {
+      let b64 = '', maps = {}, chars = url === true ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      for (let i = 0; i < chars.length; i++) { maps[chars.charAt(i)] = i; }
+      for (let i = 2; i < this.length; i += 3) {
+        const n = (this[i-2] << 16) + (this[i-1] << 8) + this[i];
+        b64 += chars.charAt((n & 0xFC0000) >> 18) + chars.charAt((n & 0x3F000) >> 12) + chars.charAt((n & 0xFC0) >> 6) + chars.charAt(n & 0x3F);
+      }
+      if (this.length % 3 == 2) {
+        const n = (this[this.length-2] << 16) + (this[this.length-1] << 8);
+        b64 += chars.charAt((n & 0xFC0000) >> 18) + chars.charAt((n & 0x3F000) >> 12) + chars.charAt((n & 0xFC0) >> 6) + (equal === false ? '' : '=');
+      } else if (this.length % 3 == 1) {
+        const n = this[this.length-1] << 16;
+        b64 += chars.charAt((n & 0xFC0000) >> 18) + chars.charAt((n & 0x3F000) >> 12) + (equal === false ? '' : '==');
+      }
+      return b64;
     },
     enumerable: false, configurable: true, writable: true,
   },
