@@ -619,6 +619,13 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  toUint8Array: {
+    value: function(url) {
+      return new Uint8Array(this);
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+  // ====== Relational ======
   assoc: {
     value: function(id, prop, assoc = {}) {
       const ids = this.unique(v => v[id]);
@@ -711,6 +718,27 @@ Object.defineProperties(Array.prototype, {
         if (c) { return c; }
       }
       return null;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+});
+
+Object.defineProperties(Uint8Array.prototype, {
+  bytes2hex: {
+    value: Array.prototype.bytes2hex,
+    enumerable: false, configurable: true, writable: true,
+  },
+  bytes2string: {
+    value: Array.prototype.bytes2string,
+    enumerable: false, configurable: true, writable: true,
+  },
+  base64encode: {
+    value: Array.prototype.base64encode,
+    enumerable: false, configurable: true, writable: true,
+  },
+  toArray: {
+    value: function() {
+      return new Array(...this);
     },
     enumerable: false, configurable: true, writable: true,
   },
