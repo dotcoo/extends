@@ -620,7 +620,7 @@ Object.defineProperties(Array.prototype, {
     enumerable: false, configurable: true, writable: true,
   },
   toUint8Array: {
-    value: function(url) {
+    value: function() {
       return new Uint8Array(this);
     },
     enumerable: false, configurable: true, writable: true,
@@ -718,6 +718,15 @@ Object.defineProperties(Array.prototype, {
         if (c) { return c; }
       }
       return null;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+});
+
+Object.defineProperties(ArrayBuffer.prototype, {
+  toUint8Array: {
+    value: function() {
+      return new Uint8Array(this);
     },
     enumerable: false, configurable: true, writable: true,
   },
