@@ -406,7 +406,7 @@ Object.defineProperties(String.prototype, {
         const n = (maps[this.charAt(l-3)] << 18) + (maps[this.charAt(l-2)] << 12) + (maps[this.charAt(l-1)] << 6);
         bytes.push((n & 0xFF0000) >> 16, (n & 0xFF00) >> 8);
       } else if (l % 4 == 2) {
-        const n = (maps[this.charAt(l-3)] << 18) + (maps[this.charAt(l-2)] << 12);
+        const n = (maps[this.charAt(l-2)] << 18) + (maps[this.charAt(l-1)] << 12);
         bytes.push((n & 0xFF0000) >> 16);
       }
       return bytes;
