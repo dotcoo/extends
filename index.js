@@ -528,7 +528,7 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  equals: {
+  equals2: {
     value: function(a) {
       return this.length === a.length && (this === a || this.length === 0 || this.every((v, i) => v === a[i]));
     },
