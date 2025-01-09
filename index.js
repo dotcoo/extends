@@ -512,13 +512,13 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  first: {
+  first0: {
     value: function(defval = null) {
       return this.length ? this[0] : defval;
     },
     enumerable: false, configurable: true, writable: true,
   },
-  last: {
+  last0: {
     value: function(defval = null) {
       return this.length ? this[this.length - 1] : defval;
     },
@@ -530,20 +530,20 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  equals: {
+  equals0: {
     value: function(a) {
       return this.length === a.length && (this === a || this.length === 0 || this.every((v, i) => v === a[i]));
     },
     enumerable: false, configurable: true, writable: true,
   },
-  unique: {
+  unique0: {
     value: function(cb = v => v) {
       const s = new Set();
       return this.filter(v => s.has(cb(v)) ? false : !!s.add(cb(v)));
     },
     enumerable: false, configurable: true, writable: true,
   },
-  each: {
+  each0: {
     value: function(cb) {
       this.forEach(cb);
       return this;
@@ -628,9 +628,9 @@ Object.defineProperties(Array.prototype, {
   // ====== Relational ======
   assoc: {
     value: function(id, prop, assoc = {}) {
-      const ids = this.unique(v => v[id]);
+      const ids = this.unique0(v => v[id]);
       const o = ids.length == 0 ? {} : typeof assoc == 'function' ? assoc(ids) : assoc;
-      return this.each(v => v[prop] = o[v[id]] ?? null);
+      return this.each0(v => v[prop] = o[v[id]] ?? null);
     },
     enumerable: false, configurable: true, writable: true,
   },
@@ -674,7 +674,7 @@ Object.defineProperties(Array.prototype, {
   treeEach: {
     value: function(cb = v => v, o = {}) {
       const { children = 'children', empty = null } = o;
-      return this.each((v, i, a) => {
+      return this.each0((v, i, a) => {
         v[children] = v[children] || empty;
         cb(v, i, a);
         v[children]?.treeEach(cb, o);
