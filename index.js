@@ -1004,6 +1004,7 @@ Object.defineProperties(JSON, {
   parse0: {
     value: function(v, defval = null) {
       try {
+        if (typeof v != 'string') { throw new Error('not string'); }
         return JSON.parse(v);
       } catch(e) {
         return defval;
