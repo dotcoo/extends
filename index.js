@@ -415,6 +415,15 @@ Object.defineProperties(String.prototype, {
   },
 });
 
+Object.defineProperties(Iterator.prototype, {
+  toArray: {
+    value: function() {
+      return Array.from(this);
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
+});
+
 Object.defineProperties(Array.prototype, {
   length0: {
     value: function() {
