@@ -385,6 +385,7 @@ Object.defineProperties(String.prototype, {
   },
   string2bytes: {
     value: function() {
+      if (typeof TextEncoder != 'undefined') { return Array.from(new TextEncoder().encode(this)); }
       const bytes = [], e = encodeURIComponent(this);
       for (let i = 0; i < e.length;) {
         bytes.push(e.charAt(i) == '%' ? Number.parseInt(e.substring(i+1, i+=3), 16) : e.charCodeAt(i++));
@@ -595,12 +596,13 @@ Object.defineProperties(Array.prototype, {
       for (let i = 0; i < this.length; i++) {
         s += (this[i] < 16 ? '0' : '') + this[i].toString(16);
       }
-      return decodeURIComponent(s);
+      return s;
     },
     enumerable: false, configurable: true, writable: true,
   },
   bytes2string: {
     value: function() {
+      if (typeof TextDecoder != 'undefined') { return new TextDecoder().decode(new Uint8Array(this)); }
       let s = '';
       for (let i = 0; i < this.length; i++) {
         s += '%' + (this[i] < 16 ? '0' : '') + this[i].toString(16);
