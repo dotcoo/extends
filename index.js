@@ -590,6 +590,16 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
+  toMerge: {
+    value: function(key = v => v.id, create = v => ({ ...v, children: v.children || [] }), append = (o, v) => o.children.push(v)) {
+      const l = [];
+      for (const v of this) {
+        append(l.find(a => key(a) == key(v)) ?? l.push1(create(v)), v);
+      }
+      return l;
+    },
+    enumerable: false, configurable: true, writable: true,
+  },
   bytes2hex: {
     value: function() {
       let s = '';
@@ -721,11 +731,11 @@ Object.defineProperties(Array.prototype, {
     },
     enumerable: false, configurable: true, writable: true,
   },
-  treeFind: {
+  treeFind0: {
     value: function(cb, children = 'children') {
       for (const v of this) {
         if (cb(v)) { return v; }
-        const c = v[children]?.treeFind(cb, children);
+        const c = v[children]?.treeFind0(cb, children);
         if (c) { return c; }
       }
       return null;

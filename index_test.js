@@ -95,13 +95,13 @@ const list = [
 // console.log(list.toTreeRecursion());
 // console.log(list.toTree());
 
-console.log(list.clone2().toTree().treeFind(v => v.id == 33));
-console.log(list.clone2().toTree().treeFind(v => v.id == 33).getParents2(true, -1));
+console.log(list.clone0().toTree().treeFind0(v => v.id == 33));
+console.log(list.clone0().toTree().treeFind0(v => v.id == 33).getParents0(true, -1));
 
 // console.log(JSON.stringify(list.toTreeRecursion()));
 // console.log(JSON.stringify(list.toTree()));
 
-// console.log(JSON.stringify(list.clone2().toTreeRecursion()) === JSON.stringify(list.clone2().toTree()));
+// console.log(JSON.stringify(list.clone0().toTreeRecursion()) === JSON.stringify(list.clone0().toTree()));
 
 // const root = { id: 0 };
 
@@ -111,7 +111,7 @@ console.log(list.clone2().toTree().treeFind(v => v.id == 33).getParents2(true, -
 // console.log(JSON.stringify(list.toTreeRecursion(root, root)));
 // console.log(JSON.stringify(list.toTree(root, root)));
 
-// console.log(JSON.stringify(list.clone2().toTreeRecursion(root, root)) === JSON.stringify(list.clone2().toTree(root, root)));
+// console.log(JSON.stringify(list.clone0().toTreeRecursion(root, root)) === JSON.stringify(list.clone0().toTree(root, root)));
 
 // const tree = list.toTree();
 
@@ -246,14 +246,25 @@ const tree1 = [
   ] },
 ];
 
-console.log(tree1.clone2().tree2tree());
+console.log(tree1.clone0().tree2tree());
 
 
 
-console.log(tree1.clone2().tree2tree().treeFind(v => v.id == 33));
-console.log(tree1.clone2().tree2tree().treeFind(v => v.id == 33).getParents2(true, -1));
+console.log(tree1.clone0().tree2tree().treeFind0(v => v.id == 33));
+console.log(tree1.clone0().tree2tree().treeFind0(v => v.id == 33).getParents0(true, -1));
 
 const root = { id: 0, name: 'ROOT', level: 0 };
-root.children = tree1.clone2().tree2tree(root, root);
+root.children = tree1.clone0().tree2tree(root, root);
 console.log(root);
-console.log(root.treeFind(v => v.id == 33));
+console.log(root.treeFind0(v => v.id == 33));
+
+
+const l = [
+  { id: 1, name: '1', cid: 1, cname: 'a' },
+  { id: 2, name: '2', cid: 1, cname: 'a' },
+  { id: 3, name: '3', cid: 1, cname: 'a' },
+  { id: 4, name: '4', cid: 2, cname: 'b' },
+  { id: 5, name: '5', cid: 2, cname: 'b' },
+  { id: 6, name: '6', cid: 2, cname: 'b' },
+];
+console.log(l.toMerge(v => v.cid));
